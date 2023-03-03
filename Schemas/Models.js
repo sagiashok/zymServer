@@ -1,90 +1,90 @@
-const mongoose = require('mongoose')
-const fun = require('../functions/functions')
-//mongooseSechma 
+const mongoose = require("mongoose");
+const fun = require("../functions/functions");
+//mongooseSechma
 const Devotees = new mongoose.Schema({
-    userName : {
-        type : String,
-        required: true
+  userName: {
+    type: String,
+    required: true,
+    default: null,
+  },
+
+  userFatherName: {
+    type: String,
+    required: true,
+    default: null,
+  },
+
+  userPhoneNumber: {
+    type: String,
+    validate: {
+      validator: (value) => {
+        return /^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10}\s*,?$/.test(value);
+      },
+      message: "The phone number must be 10 digits",
     },
+    required: true,
+    default: null,
+  },
 
-    userFatherName :{
-        type : String,
-        required : true
+  userEmailId: {
+    type: String,
+    trim: true,
+    lowercase: true,
+
+    // validation  of Email
+    validate: {
+      validator: function (v) {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+      },
+      message: "Please enter a valid email",
     },
+    required: [true, "Email required"],
+    default: null,
+  },
 
-    userPhoneNumber : {
-        type : String,
-        validate:{
-            validator: (value) =>{
-               return /^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10}\s*,?$/.test(value)
-            },
-            message : "The phone number must be 10 digits"
+  userAge: {
+    type: Number,
+    validate: {
+      validator: (value) => {
+        return value.toString().length === 2;
+      },
 
-
-},
-    required:true
-},
-
-    userEmailId: {
-        type: String,
-        trim: true,
-        lowercase: true,
-        
-        // validation  of Email
-        validate: {
-            validator: function(v) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-            },
-            message: "Please enter a valid email"
-        },
-        required: [true, "Email required"]
+      message: "Enter a Valid Age",
     },
+    required: true,
+    default: null,
+  },
+  entryDate: {
+    type: Date,
+    default: Date.now(),
+    required: true,
+  },
 
-    userAge:{
-        type:Number,
-        validate:{
-            validator: (value) =>{
-                return  (value.toString().length === 2 )
-            },
+  exitDate: {
+    type: Date,
+    default: fun.dateWithMonthsDelay(1),
+    required: true,
+  },
 
-            message: "Enter a Valid Age"
-        },
-        required: true,
-        
+  paidAmount: {
+    type: Number,
+    validate: {
+      validator: (value) => {
+        return value.toString().length === 4 || value.toString().length === 5;
+      },
+
+      message: "Enter a Valid Amount",
     },
-    entryDate:{
-        type: Date,
-        default: Date.now(),
-        required: true
+    required: true,
+    default: null,
+  },
 
-    },
-
-    exitDate:{
-        type:Date,
-        default: fun.dateWithMonthsDelay(1),
-        required: true
-       
-    },
-
-    paidAmount:{
-        type:Number,
-        validate:{
-            validator: (value) =>{
-                return  (value.toString().length === 4 || value.toString().length === 5 )
-            },
-
-            message: "Enter a Valid Amount"
-        },
-        required:true,
-       
-    },
-
-    userPackage:{
-        type: String,
-        required:true
-    }
-
-})
+  userPackage: {
+    type: String,
+    required: true,
+    default: null,
+  },
+});
 
 // Model creation
-module.exports  = mongoose.model('devotee',Devotees)
+module.exports = mongoose.model("devotee", Devotees);
